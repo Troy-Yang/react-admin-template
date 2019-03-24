@@ -1,12 +1,13 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const path = require('path');
 
-const htmlPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
-  filename: "./index.html"
-});
-
 module.exports = {
+  entry: __dirname + "/src/index.js", // webpack entry point. Module to start building dependency graph
+  output: {
+    path: __dirname + '/dist', // Folder to store generated bundle
+    filename: 'bundle.js',  // Name of generated bundle after build
+    publicPath: '/' // public URL of the output directory when referenced in a browser
+  },
   devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -51,5 +52,14 @@ module.exports = {
       }
     ]
   },
-  plugins: [htmlPlugin]
+  plugins: [
+    new HtmlWebPackPlugin({
+      template:  __dirname + "/src/index.html",
+      inject: 'body'
+    })],
+  devServer: {
+    port: process.env.PORT || 4000,
+    contentBase: './dist',
+    historyApiFallback: true
+  }
 };
